@@ -9,3 +9,13 @@ jobs:
         run: sudo apt-get install libelf-dev freeglut3-dev gcc-avr avr-libc
       - name: Build
         run: make
+  build-macos:
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          brew tap osx-cross/homebrew-avr
+          brew install avr-gcc libelf
+      - name: Build
+        run: make
