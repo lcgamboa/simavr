@@ -106,7 +106,7 @@ main(
 			display_usage(basename(argv[0]));
 		} else if (!strcmp(argv[pi], "-m") || !strcmp(argv[pi], "--mcu")) {
 			if (pi < argc-1)
-				snprintf(name, sizeof(name), "%s", argv[++pi]);
+				snprintf(name, sizeof(name)-1, "%s", argv[++pi]);
 			else
 				display_usage(basename(argv[0]));
 		} else if (!strcmp(argv[pi], "-f") || !strcmp(argv[pi], "--freq")) {

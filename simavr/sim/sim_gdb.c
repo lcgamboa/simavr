@@ -193,6 +193,35 @@ gdb_send_reply(
 	send(g->s, reply, dst - reply + 3, 0);
 }
 
+static void
+gdb_send_stop_status(
+		avr_gdb_t  * g,
+		uint8_t     signal,
+		const char * reason,
+		uint32_t   * pp )
+{
+	avr_t   * avr;
+	uint8_t   sreg;
+	int       n;
+	char      cmd[64];
+
+	avr = g->avr;
+	READ_SREG_INTO(avr, sreg);
+
+	n = sprintf(cmd, "T%02x20:%02x;21:%02x%02x;22:%02x%02x%02x00;",
+				signal, sreg,
+				avr->data[R_SPL], avr->data[R_SPH],
+				avr->pc & 0xff, (avr->pc >> 8) & 0xff,
+				(avr->pc >> 16) & 0xff);
+	if (reason) {
+		if (pp)
+			sprintf(cmd + n, "%s:%x;", reason, *pp);
+		else
+			sprintf(cmd + n, "%s:;", reason);
+	}
+	gdb_send_reply(g, cmd);
+}
+
 void
 gdb_send_quick_status(
 		avr_gdb_t * g,
@@ -664,7 +693,7 @@ avr_gdb_processor(
 		gdb_send_quick_status(g, 0);
 		avr->state = cpu_Stopped;
 	} else if (avr->state == cpu_StepDone) {
-		gdb_send_quick_status(g, 0);
+		gdb_send_stop_status(g, 5, "hwbreak", NULL);
 		avr->state = cpu_Stopped;
 	}
 	// this also sleeps for a bit
