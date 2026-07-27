@@ -7,7 +7,7 @@
 # For package building, you will need to pass RELEASE=1 to make
 RELEASE	?= 0
 
-DESTDIR = /usr/local
+DESTDIR ?= /usr/local
 #DESTDIR = /usr/
 PREFIX = ${DESTDIR}
 
