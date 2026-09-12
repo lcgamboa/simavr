@@ -10,7 +10,7 @@ jobs:
       - name: Build
         run: make build-simavr
   build-macos:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies

@@ -45,7 +45,7 @@ CFLAGS		+= -Wall -Wextra -Wno-unused-parameter \
 			-Wno-unused-result -Wno-missing-field-initializers \
 			-Wno-sign-compare
 #CFLAGS		+= -ggdb -Og
-CFLAGS		+= -O2 -flto
+CFLAGS		+= -O2 
 CORE_CFLAGS	= -DAVR_CORE=1
 
 ifeq (${shell uname}, Darwin)
@@ -119,7 +119,7 @@ OBJ 		:= obj-${shell $(CC) -dumpmachine}
 LIBDIR		:= ${shell pwd}/${SIMAVR}/${OBJ}
 LDFLAGS 	+= -L${LIBDIR} -lsimavr -lm
 
-LDFLAGS 	+= -lelf -flto
+LDFLAGS 	+= -lelf 
 
 ifeq (${WIN}, Msys)
 LDFLAGS      += -lws2_32
@@ -214,7 +214,7 @@ ${OBJ}/%.so.1: ${OBJ}/%.a
 ifneq ($(E),)
 	@echo SHARED $@
 endif
-	${E}$(CC) -flto -o $@ -shared \
+	${E}$(CC) -o $@ -shared \
 		-Wl,--whole-archive,-soname,${basename ${notdir $@}}.1 \
 		${filter %.o %.a,$^} \
 		 -Wl,--no-whole-archive \
